@@ -1,4 +1,4 @@
-package com.vkartik.myspace.ui.presentation.sign_in
+package com.vkartik.myspace.data
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.vkartik.myspace.R
+import com.vkartik.myspace.ui.presentation.sign_in.SignInResult
+import com.vkartik.myspace.ui.presentation.sign_in.UserData
 import kotlinx.coroutines.tasks.await
 
 class GoogleAuthUiClient(
