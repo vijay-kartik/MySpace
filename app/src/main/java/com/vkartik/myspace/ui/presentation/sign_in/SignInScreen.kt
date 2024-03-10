@@ -44,38 +44,37 @@ fun SignInScreen(
             }
         }
     )
-    
-    LaunchedEffect(key1 = state.signInError) {
+
+    LaunchedEffect(key1 = state) {
+        if (state.isUserSignedIn || state.isSignInSuccess) {
+            Log.i("SignInScreen", "user already signed in")
+            navigateToHome()
+            viewModel.resetState()
+        }
         state.signInError?.let { error ->
             Log.i("SignInScreen", "sign in error")
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
         }
     }
 
-    LaunchedEffect(key1 = state.isSignInSuccess) {
-        if (state.isSignInSuccess) {
-            Log.i("SignInScreen", "launch effect signin success")
-            navigateToHome()
-            viewModel.resetState()
-        }
-    }
-
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp), contentAlignment = Alignment.Center) {
-        Button(onClick = {
-            coroutineScope.launch {
-                Log.i("SignInScreen", "button clicked")
+        if (!state.isUserSignedIn) {
+            Button(onClick = {
+                coroutineScope.launch {
+                    Log.i("SignInScreen", "button clicked")
 
-                val signInIntent = viewModel.getSignInIntent()
-                launcher.launch(
-                    IntentSenderRequest.Builder(
-                        signInIntent ?: return@launch
-                    ).build()
-                )
+                    val signInIntent = viewModel.getSignInIntent()
+                    launcher.launch(
+                        IntentSenderRequest.Builder(
+                            signInIntent ?: return@launch
+                        ).build()
+                    )
+                }
+            }) {
+                Text("SignIn")
             }
-        }) {
-            Text("SignIn")
         }
     }
 

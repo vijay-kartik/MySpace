@@ -32,7 +32,7 @@ import com.vkartik.myspace.ui.utils.extractBorderColorFrom
 import com.vkartik.myspace.ui.utils.resizeBitmap
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onSignOut: () -> Unit) {
     val selectedFile: String? by viewModel.fileSelected.collectAsStateWithLifecycle()
     val internetConnected: Boolean? by viewModel.internetConnected.collectAsStateWithLifecycle()
     val selectedBitmap: Uri? by viewModel.selectedImage.collectAsStateWithLifecycle()
@@ -91,6 +91,13 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         .clip(toImageShape)
                         .border(borderStroke, toImageShape)
                 )
+            }
+            Button(onClick = {
+                viewModel.signOut {
+                    onSignOut()
+                }
+            }) {
+                Text(text = "Sign Out")
             }
         }
     }

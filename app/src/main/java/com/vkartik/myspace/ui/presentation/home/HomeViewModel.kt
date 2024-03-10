@@ -3,18 +3,22 @@ package com.vkartik.myspace.ui.presentation.home
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vkartik.myspace.data.GoogleAuthUiClient
 import com.vkartik.myspace.data.interactors.CheckInternetStatusUseCase
 import com.vkartik.myspace.data.interactors.UploadFileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val uploadFileUseCase: UploadFileUseCase,
-    private val checkInternetStatusUseCase: CheckInternetStatusUseCase
+    private val checkInternetStatusUseCase: CheckInternetStatusUseCase,
+    private val googleAuthUiClient: GoogleAuthUiClient
 ): ViewModel() {
     init {
         checkInternetStatus()
@@ -51,5 +55,12 @@ class HomeViewModel @Inject constructor(
 
     fun onImageSelected(uri: Uri?) {
         _selectedImage.value = uri
+    }
+
+    fun signOut(onSuccessfulSignOut: () -> Unit) {
+        viewModelScope.launch {
+            googleAuthUiClient.signOut()
+            onSuccessfulSignOut()
+        }
     }
 }

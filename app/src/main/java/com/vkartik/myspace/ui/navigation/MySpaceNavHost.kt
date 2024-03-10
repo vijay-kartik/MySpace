@@ -27,7 +27,9 @@ fun MySpaceNavHost(navController: NavHostController = rememberNavController()) {
         }
 
         composable(Screens.HOME.route) {
-            HomeScreen()
+            HomeScreen {
+                navController.navigate(Screens.SIGN_IN.route)
+            }
         }
     }
 }

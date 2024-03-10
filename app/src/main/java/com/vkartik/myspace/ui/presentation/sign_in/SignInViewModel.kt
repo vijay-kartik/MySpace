@@ -17,6 +17,16 @@ class SignInViewModel @Inject constructor(
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
+    init {
+        if (getCurrentUser() != null) {
+            _state.update {
+                it.copy(
+                    isUserSignedIn = true
+                )
+            }
+        }
+    }
+
     private fun onSignInResult(result: SignInResult) {
         _state.update {
             it.copy(
@@ -39,5 +49,9 @@ class SignInViewModel @Inject constructor(
 
     suspend fun getSignInIntent(): IntentSender? {
         return googleAuthUiClient.signIn()
+    }
+
+    private fun getCurrentUser(): UserData? {
+        return googleAuthUiClient.getSignedInUser()
     }
 }
