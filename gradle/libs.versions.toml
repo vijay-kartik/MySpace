@@ -4,6 +4,7 @@
 
 [versions]
 agp = "8.2.0"
+coil = "2.6.0"
 colorthief = "2.1.1"
 datastore = "1.0.0"
 firebase-storage = "20.3.0"
@@ -30,6 +31,8 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 colorthief = { module = "com.github.nyan:colorthief", version.ref = "colorthief" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebase-storage" }

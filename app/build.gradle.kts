@@ -91,6 +91,7 @@ dependencies {
 
     //image libraries
     implementation(libs.androidx.palette)
+    implementation(libs.coil.compose)
 }
 
 // Allow references to generated code

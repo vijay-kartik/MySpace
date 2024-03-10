@@ -32,6 +32,9 @@ class HomeViewModel @Inject constructor(
     private val _selectedImage: MutableStateFlow<Uri?> = MutableStateFlow(null)
     val selectedImage: StateFlow<Uri?> get() = _selectedImage
 
+    private val _homeUiState: MutableStateFlow<HomeUiState?> = MutableStateFlow(null)
+    val homeUiState: StateFlow<HomeUiState?> get() = _homeUiState
+
     fun onFileSelected(fileUri: String?) {
         _fileSelected.value = fileUri
         uploadFileUseCase.execute(fileUri)
@@ -55,6 +58,12 @@ class HomeViewModel @Inject constructor(
 
     fun onImageSelected(uri: Uri?) {
         _selectedImage.value = uri
+    }
+
+    fun showSignedInUserData() {
+        googleAuthUiClient.getSignedInUser()?.let {
+            _homeUiState.value = HomeUiState(it)
+        }
     }
 
     fun signOut(onSuccessfulSignOut: () -> Unit) {
