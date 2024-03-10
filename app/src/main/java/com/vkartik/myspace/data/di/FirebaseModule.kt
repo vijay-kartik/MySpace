@@ -5,6 +5,7 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.vkartik.myspace.data.GoogleAuthUiClient
 import dagger.Module
 import dagger.Provides
@@ -20,4 +21,8 @@ object FirebaseModule {
     @Provides
     fun googleAuthUiClient(@ApplicationContext appContext: Context): GoogleAuthUiClient =
         GoogleAuthUiClient(appContext, Identity.getSignInClient(appContext))
+
+    @Provides
+    fun firebaseStorage() = FirebaseStorage.getInstance()
+
 }

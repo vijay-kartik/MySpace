@@ -66,6 +66,7 @@ fun SignInScreen(
         Button(onClick = {
             coroutineScope.launch {
                 Log.i("SignInScreen", "button clicked")
+
                 val signInIntent = viewModel.getSignInIntent()
                 launcher.launch(
                     IntentSenderRequest.Builder(

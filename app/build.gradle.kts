@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.protobuf") version "0.9.3"
 }
 
 android {
@@ -13,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.vkartik.myspace"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -63,13 +64,20 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
+    //firebase dependencies
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+    implementation (libs.firebase.storage)
 
     //hilt dependencies
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    //data store dependencies
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.kotlin.lite)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -80,9 +88,27 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    //image libraries
+    implementation(libs.androidx.palette)
 }
 
 // Allow references to generated code
 kapt {
     correctErrorTypes = true
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.23.4"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
 }
