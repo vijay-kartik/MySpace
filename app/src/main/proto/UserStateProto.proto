@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package com.vkartik.myspace;
+
+message UserStateProto {
+    bool is_user_signed_in = 1;
+    string username = 2;
+    bytes profile_pic = 3;
+}

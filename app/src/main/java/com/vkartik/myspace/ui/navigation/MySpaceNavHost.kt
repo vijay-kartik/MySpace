@@ -23,12 +23,20 @@ import com.vkartik.myspace.ui.presentation.sign_in.SignInViewModel
 fun MySpaceNavHost(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = "sign_in") {
         composable(Screens.SIGN_IN.route) {
-            SignInScreen { navController.navigate(Screens.HOME.route) }
+            SignInScreen { navController.navigate(Screens.HOME.route) {
+                popUpTo(Screens.SIGN_IN.route) {
+                    inclusive = true
+                }
+            } }
         }
 
         composable(Screens.HOME.route) {
             HomeScreen {
-                navController.navigate(Screens.SIGN_IN.route)
+                navController.navigate(Screens.SIGN_IN.route) {
+                    popUpTo(Screens.HOME.route) {
+                        inclusive = true
+                    }
+                }
             }
         }
     }

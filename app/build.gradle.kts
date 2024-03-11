@@ -52,6 +52,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDir("src/main/proto")
+        }
+    }
 }
 
 dependencies {
@@ -77,7 +83,8 @@ dependencies {
 
     //data store dependencies
     implementation(libs.androidx.datastore)
-    implementation(libs.protobuf.kotlin.lite)
+//    implementation(libs.protobuf.kotlin.lite)
+    implementation(libs.protobuf.javalite)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -101,12 +108,12 @@ kapt {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.23.4"
+        artifact = "com.google.protobuf:protoc:3.14.0"
     }
     generateProtoTasks {
         all().forEach { task ->
             task.builtins {
-                register("kotlin") {
+                register("java") {
                     option("lite")
                 }
             }
