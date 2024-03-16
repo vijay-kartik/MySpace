@@ -10,33 +10,29 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.vkartik.myspace.MySpaceAppState
 import com.vkartik.myspace.ui.presentation.Screens
 import com.vkartik.myspace.ui.presentation.home.HomeScreen
 import com.vkartik.myspace.ui.presentation.sign_in.SignInScreen
 import com.vkartik.myspace.ui.presentation.sign_in.SignInViewModel
 
 @Composable
-fun MySpaceNavHost(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = "sign_in") {
+fun MySpaceNavHost(appState: MySpaceAppState, startDestination: String) {
+    NavHost(navController = appState.navController, startDestination = startDestination) {
         composable(Screens.SIGN_IN.route) {
-            SignInScreen { navController.navigate(Screens.HOME.route) {
-                popUpTo(Screens.SIGN_IN.route) {
-                    inclusive = true
-                }
-            } }
+            SignInScreen {
+                appState.navigateAndPopUp(Screens.HOME.route, Screens.SIGN_IN.route)
+            }
         }
 
         composable(Screens.HOME.route) {
             HomeScreen {
-                navController.navigate(Screens.SIGN_IN.route) {
-                    popUpTo(Screens.HOME.route) {
-                        inclusive = true
-                    }
-                }
+                appState.navigateAndPopUp(Screens.SIGN_IN.route, Screens.HOME.route)
             }
         }
     }

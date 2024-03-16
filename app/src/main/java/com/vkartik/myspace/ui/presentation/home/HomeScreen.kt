@@ -13,16 +13,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,24 +31,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.example.core.ui.extensions.showToast
+import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
+import com.vkartik.myspace.ui.presentation.home.components.ProfileIconButton
 import com.vkartik.myspace.ui.utils.extractBorderColorFrom
 import com.vkartik.myspace.ui.utils.resizeBitmap
 import kotlinx.coroutines.launch
@@ -60,20 +52,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn: () -> Unit) {
     val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
-    val internetConnected: Boolean? by viewModel.internetConnected.collectAsStateWithLifecycle()
-    val selectedBitmap: Uri? by viewModel.selectedImage.collectAsStateWithLifecycle()
 
     viewModel.fetchSignedInUserData()
-    val context = LocalContext.current
-    val launcher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
-            viewModel.onImageSelected(uri)
-        }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        scrimColor = Color.Transparent,
         drawerContent = { DrawerContent() }) {
         Scaffold(topBar = {
             TopAppBar(
@@ -88,7 +74,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn:
                     }
                 },
                 actions = {
-                    ProfileIconButton(homeUiState = homeUiState) {
+                    ProfileIconButton(userData = homeUiState?.userData) {
                         viewModel.signOut { navigateBackToSignIn() }
                     }
                 },
@@ -97,15 +83,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn:
         },
             content = { paddingValues ->
                 HomeContent(
-                    selectedBitmap = selectedBitmap,
-                    launchImagePicker = {
-                        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    },
-                    checkInternetStatus = {
-                        internetConnected?.let { connected ->
-                            context.showToast(if (connected) "Internet connected" else "Device Offline")
-                        }
-                    },
+                    viewModel = viewModel,
                     modifier = Modifier.padding(paddingValues)
                 )
             }
@@ -115,65 +93,34 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn:
 
 
 @Composable
-fun ProfileIconButton(homeUiState: HomeUiState?, signOut: () -> Unit) {
-    var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
-    var pressOffSet by remember { mutableStateOf(DpOffset(0.dp, 0.dp)) }
-    var itemHeight by remember { mutableStateOf(0.dp) }
-    var itemWidth by remember { mutableStateOf(0.dp) }
-    val density = LocalDensity.current
-
-    IconButton(onClick = { isContextMenuVisible = true }) {
-        Box(
-            modifier = Modifier
-                .wrapContentSize()
-                .onSizeChanged {
-                    itemHeight = with(density) { it.height.toDp() }
-                    itemWidth = with(density) { it.width.toDp() }
-                }
-        ) {
-            AsyncImage(
-                model = homeUiState?.userData?.profilePicUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(CircleShape)
-            )
-
-            DropdownMenu(
-                expanded = isContextMenuVisible,
-                onDismissRequest = { isContextMenuVisible = false },
-                offset = pressOffSet.copy(y = pressOffSet.y + 8.dp, x = itemWidth - 30.dp)
-            ) {
-                DropdownMenuItem(onClick = {
-                    isContextMenuVisible = false
-                    signOut()
-                }, text = { Text(text = "Sign Out") })
-            }
-        }
-    }
-
-
-}
-
-
-@Composable
 fun HomeContent(
-    selectedBitmap: Uri?,
-    launchImagePicker: () -> Unit,
-    checkInternetStatus: () -> Unit,
+    viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
+    val selectedBitmap: Uri? by viewModel.selectedImage.collectAsStateWithLifecycle()
+    val internetConnected: Boolean? by viewModel.internetConnected.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
+            viewModel.onImageSelected(uri)
+        }
     Box(
-        modifier = modifier.padding(16.dp), contentAlignment = Alignment.TopStart
+        modifier = modifier.padding(16.dp).fillMaxWidth(), contentAlignment = Alignment.TopStart
     ) {
-        Column {
-            Spacer(modifier = Modifier.padding(8.dp))
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.End)) {
+                Text(text = "Create a category")
+            }
             Button(onClick = {
-                checkInternetStatus()
+                internetConnected?.let { connected ->
+                    context.showToast(if (connected) "Internet connected" else "Device Offline")
+                }
             }) {
                 Text(text = "Check internet status")
             }
             Button(onClick = {
-                launchImagePicker()
+                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }) {
                 Text(text = "Choose file to Upload")
             }
@@ -210,11 +157,4 @@ fun ImageUploads(selectedBitmap: Uri?) {
     }
 }
 
-@Composable
-fun DrawerContent() {
-    Column {
-        Text(text = "Movies")
-        Text(text = "Fodd log")
-    }
-}
 
