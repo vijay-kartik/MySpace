@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(
         _selectedImage.value = uri
     }
 
-    fun showSignedInUserData() {
+    fun fetchSignedInUserData() {
         googleAuthUiClient.getSignedInUser()?.let {
             _homeUiState.value = HomeUiState(it)
         }

@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MySpace"
 include(":app")
+include(":movies")
+include(":core")

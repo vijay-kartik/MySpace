@@ -64,12 +64,25 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+
+    //modular dependencies
+    implementation(project(":core"))
+
+    //compose
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation("androidx.compose.material:material:1.4.3")
+    implementation("androidx.compose.ui:ui:1.4.3")
+    androidTestImplementation(platform(libs.compose.bom))
+
+
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    debugImplementation(libs.ui.tooling)
 
     //firebase dependencies
     implementation(libs.firebase.auth)
@@ -86,14 +99,10 @@ dependencies {
 //    implementation(libs.protobuf.kotlin.lite)
     implementation(libs.protobuf.javalite)
 
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
-    debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
     //image libraries

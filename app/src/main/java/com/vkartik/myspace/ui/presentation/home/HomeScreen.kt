@@ -3,32 +3,40 @@ package com.vkartik.myspace.ui.presentation.home
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,75 +51,92 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.vkartik.myspace.ui.presentation.sign_in.UserData
+import com.example.core.ui.extensions.showToast
 import com.vkartik.myspace.ui.utils.extractBorderColorFrom
 import com.vkartik.myspace.ui.utils.resizeBitmap
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn: () -> Unit) {
     val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
     val internetConnected: Boolean? by viewModel.internetConnected.collectAsStateWithLifecycle()
     val selectedBitmap: Uri? by viewModel.selectedImage.collectAsStateWithLifecycle()
 
-    viewModel.showSignedInUserData()
+    viewModel.fetchSignedInUserData()
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
             viewModel.onImageSelected(uri)
         }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        UserDetail(userData = homeUiState?.userData) { viewModel.signOut { navigateBackToSignIn() } }
-        Spacer(modifier = Modifier.padding(10.dp))
-        HomeContent(selectedBitmap = selectedBitmap,
-            launchImagePicker = {
-                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            },
-            checkInternetStatus = {
-                internetConnected?.let { connected ->
-                    Toast.makeText(
-                        context,
-                        if (connected) "Internet connected" else "Device Offline",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent() }) {
+        Scaffold(topBar = {
+            TopAppBar(
+                title = { Text("My Space") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        coroutineScope.launch {
+                            drawerState.open()
+                        }
+                    }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                    }
+                },
+                actions = {
+                    ProfileIconButton(homeUiState = homeUiState) {
+                        viewModel.signOut { navigateBackToSignIn() }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors()
+            )
+        },
+            content = { paddingValues ->
+                HomeContent(
+                    selectedBitmap = selectedBitmap,
+                    launchImagePicker = {
+                        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    checkInternetStatus = {
+                        internetConnected?.let { connected ->
+                            context.showToast(if (connected) "Internet connected" else "Device Offline")
+                        }
+                    },
+                    modifier = Modifier.padding(paddingValues)
+                )
             }
         )
     }
 }
 
+
 @Composable
-fun UserDetail(userData: UserData?, signOut: () -> Unit) {
+fun ProfileIconButton(homeUiState: HomeUiState?, signOut: () -> Unit) {
     var isContextMenuVisible by rememberSaveable { mutableStateOf(false) }
     var pressOffSet by remember { mutableStateOf(DpOffset(0.dp, 0.dp)) }
     var itemHeight by remember { mutableStateOf(0.dp) }
     var itemWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-    ) {
-        Text(
-            "Welcome ${userData?.userName?.split(" ")?.first()}",
-            modifier = Modifier.align(Alignment.CenterVertically)
-        )
 
+    IconButton(onClick = { isContextMenuVisible = true }) {
         Box(
             modifier = Modifier
                 .wrapContentSize()
-                .padding(10.dp)
                 .onSizeChanged {
                     itemHeight = with(density) { it.height.toDp() }
                     itemWidth = with(density) { it.width.toDp() }
-                }, contentAlignment = Alignment.TopEnd
+                }
         ) {
-            AsyncImage(model = userData?.profilePicUrl,
+            AsyncImage(
+                model = homeUiState?.userData?.profilePicUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .clickable { isContextMenuVisible = true })
+            )
 
             DropdownMenu(
                 expanded = isContextMenuVisible,
@@ -125,18 +150,23 @@ fun UserDetail(userData: UserData?, signOut: () -> Unit) {
             }
         }
     }
+
+
 }
+
 
 @Composable
 fun HomeContent(
     selectedBitmap: Uri?,
     launchImagePicker: () -> Unit,
-    checkInternetStatus: () -> Unit
+    checkInternetStatus: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier.padding(16.dp), contentAlignment = Alignment.TopStart
+        modifier = modifier.padding(16.dp), contentAlignment = Alignment.TopStart
     ) {
         Column {
+            Spacer(modifier = Modifier.padding(8.dp))
             Button(onClick = {
                 checkInternetStatus()
             }) {
@@ -177,6 +207,14 @@ fun ImageUploads(selectedBitmap: Uri?) {
                 .clip(toImageShape)
                 .border(borderStroke, toImageShape)
         )
+    }
+}
+
+@Composable
+fun DrawerContent() {
+    Column {
+        Text(text = "Movies")
+        Text(text = "Fodd log")
     }
 }
 

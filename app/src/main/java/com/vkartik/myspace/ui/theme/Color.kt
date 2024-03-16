@@ -10,14 +10,6 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val DarkNavyBlue = Color(0xFF0D1B2A)
-val LightBlue = Color(0xFF1B3B6F)
-val BrightBlue = Color(0xFF1C74D9)
-val Yellow = Color(0xFFFFB545)
-val Orange = Color(0xFFFF7845)
-val White = Color(0xFFFFFFFF)
-
-
 val primary: Color = Color(0xFF1C74D9) // Bright Blue
 val onPrimary: Color = Color(0xFFFFFFFF) // White
 val primaryContainer: Color = Color(0xFF1B3B6F) // Light Blue

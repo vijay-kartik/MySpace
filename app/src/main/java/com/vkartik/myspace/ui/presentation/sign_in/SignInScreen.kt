@@ -1,15 +1,18 @@
 package com.vkartik.myspace.ui.presentation.sign_in
 
+import android.graphics.BitmapFactory
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,13 +20,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.example.core.ui.extensions.showToast
+import com.vkartik.myspace.R
+import com.vkartik.myspace.ui.utils.resizeBitmap
 
 @Composable
 fun SignInScreen(
@@ -48,19 +57,16 @@ fun SignInScreen(
 
     LaunchedEffect(key1 = state) {
         if (state.isUserSignedIn || state.isSignInSuccess) {
-            Log.i("SignInScreen", "user already signed in")
             navigateToHome()
             viewModel.resetState()
         }
         state.signInError?.let { error ->
-            Log.i("SignInScreen", "sign in error")
-            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+            context.showToast(error)
         }
     }
     LaunchedEffect(key1 = internetConnected) {
         if (internetConnected != null && !internetConnected!!) {
-            Log.i("SignInScreen", "internet not connected")
-            Toast.makeText(context, "Connect to the internet to continue", Toast.LENGTH_SHORT).show()
+            context.showToast("Connect to the internet to continue")
         }
     }
 
@@ -68,27 +74,27 @@ fun SignInScreen(
         .fillMaxSize()
         .padding(16.dp), contentAlignment = Alignment.Center) {
         if (!state.isUserSignedIn) {
-            Button(onClick = {
-                coroutineScope.launch {
-                    Log.i("SignInScreen", "button clicked")
+            Column {
+                Text("Welcome to your space", style = MaterialTheme.typography.bodyLarge.copy(color = Color.White))
 
-                    if (internetConnected == false) {
-                        Log.i("SignInScreen", "internet not connected")
-                        Toast.makeText(context, "Connect to the internet to continue", Toast.LENGTH_SHORT).show()
-                        return@launch
+                Button(onClick = {
+                    coroutineScope.launch {
+                        if (internetConnected == false) {
+                            context.showToast("Connect to the internet to continue")
+                            return@launch
+                        }
+
+                        val signInIntent = viewModel.getSignInIntent()
+                        launcher.launch(
+                            IntentSenderRequest.Builder(
+                                signInIntent ?: return@launch
+                            ).build()
+                        )
                     }
-
-                    val signInIntent = viewModel.getSignInIntent()
-                    launcher.launch(
-                        IntentSenderRequest.Builder(
-                            signInIntent ?: return@launch
-                        ).build()
-                    )
+                }) {
+                    Text("SignIn")
                 }
-            }) {
-                Text("SignIn")
             }
         }
     }
-
 }
