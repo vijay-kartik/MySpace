@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package com.vkartik.myspace;
 
+option java_package = "com.vkartik.myspace";
+
 message UserStateProto {
     bool is_user_signed_in = 1;
     string username = 2;

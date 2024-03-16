@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.vkartik.myspace.UserStateProtoOuterClass.UserStateProto
 import com.vkartik.myspace.data.UserStateProtoSerializer
 import dagger.Module
 import dagger.Provides
@@ -23,20 +22,20 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-    @Provides
-    @Singleton
-    fun providesUserPreferencesDataStore(
-        @ApplicationContext context: Context,
-        @IODispatcher ioDispatcher: CoroutineDispatcher,
-        @ApplicationScope scope: CoroutineScope,
-        userStateProtoSerializer: UserStateProtoSerializer,
-    ): DataStore<UserStateProto> =
-        DataStoreFactory.create(
-            serializer = userStateProtoSerializer,
-            scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
-        ) {
-            context.dataStoreFile("UserStateProto.proto")
-        }
+//    @Provides
+//    @Singleton
+//    fun providesUserPreferencesDataStore(
+//        @ApplicationContext context: Context,
+//        @IODispatcher ioDispatcher: CoroutineDispatcher,
+//        @ApplicationScope scope: CoroutineScope,
+//        userStateProtoSerializer: UserStateProtoSerializer,
+//    ): DataStore<UserStateProto> =
+//        DataStoreFactory.create(
+//            serializer = userStateProtoSerializer,
+//            scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
+//        ) {
+//            context.dataStoreFile("UserStateProto.proto")
+//        }
 
     @Provides
     @IODispatcher

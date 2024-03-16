@@ -33,6 +33,7 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
     val state: SignInState by viewModel.state.collectAsStateWithLifecycle()
+    val internetConnected: Boolean? by viewModel.internetConnected.collectAsStateWithLifecycle()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult(),
@@ -56,6 +57,12 @@ fun SignInScreen(
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
         }
     }
+    LaunchedEffect(key1 = internetConnected) {
+        if (internetConnected != null && !internetConnected!!) {
+            Log.i("SignInScreen", "internet not connected")
+            Toast.makeText(context, "Connect to the internet to continue", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -64,6 +71,12 @@ fun SignInScreen(
             Button(onClick = {
                 coroutineScope.launch {
                     Log.i("SignInScreen", "button clicked")
+
+                    if (internetConnected == false) {
+                        Log.i("SignInScreen", "internet not connected")
+                        Toast.makeText(context, "Connect to the internet to continue", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
 
                     val signInIntent = viewModel.getSignInIntent()
                     launcher.launch(
