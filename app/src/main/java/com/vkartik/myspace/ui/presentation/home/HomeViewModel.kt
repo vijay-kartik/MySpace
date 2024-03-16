@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.vkartik.myspace.data.GoogleAuthUiClient
 import com.vkartik.myspace.data.interactors.CheckInternetStatusUseCase
 import com.vkartik.myspace.data.interactors.UploadFileUseCase
+import com.vkartik.myspace.domain.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -77,6 +78,13 @@ class HomeViewModel @Inject constructor(
     fun showCategoryDialog(show: Boolean = true) {
         _homeUiState.update {
             it?.copy(showCategoryDialog = show)
+        }
+    }
+
+    fun onCategoryCreated(selectedImageUri: Uri?, categoryName: String) {
+        _homeUiState.update {
+            it?.categoryList?.add(Category(categoryName, selectedImageUri))
+            it
         }
     }
 }

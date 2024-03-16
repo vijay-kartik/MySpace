@@ -4,6 +4,9 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.palette.graphics.Palette
 import kotlin.math.min
 
@@ -23,6 +26,11 @@ fun resizeBitmap(originalBitmap: Bitmap, percentageWidth: Int): Bitmap {
 
     // Create a new bitmap and scale the original bitmap
     return Bitmap.createScaledBitmap(originalBitmap, desiredWidth, newHeight, true)
+}
+
+fun resizeBitmap(originalBitmap: Bitmap, size: Dp, density: Density): Bitmap {
+    val sizePx = with(density) {size.toPx().toInt() }
+    return Bitmap.createScaledBitmap(originalBitmap, sizePx, sizePx, true)
 }
 
 fun extractBorderColorFrom(bitmap: Bitmap): Color {
