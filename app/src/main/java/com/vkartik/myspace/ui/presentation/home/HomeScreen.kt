@@ -30,6 +30,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.extensions.showToast
+import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryCard
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
 import com.vkartik.myspace.ui.presentation.home.components.ProfileIconButton
 import com.vkartik.myspace.ui.utils.extractBorderColorFrom
@@ -99,17 +101,25 @@ fun HomeContent(
 ) {
     val selectedBitmap: Uri? by viewModel.selectedImage.collectAsStateWithLifecycle()
     val internetConnected: Boolean? by viewModel.internetConnected.collectAsStateWithLifecycle()
+    val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
             viewModel.onImageSelected(uri)
         }
     Box(
-        modifier = modifier.padding(16.dp).fillMaxWidth(), contentAlignment = Alignment.TopStart
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxWidth(), contentAlignment = Alignment.TopStart
     ) {
+        if (homeUiState?.showCategoryDialog == true) {
+            CreateCategoryCard {
+                viewModel.showCategoryDialog(false)
+            }
+        }
         Column(modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.End)) {
+            Button(onClick = { viewModel.showCategoryDialog() }, modifier = Modifier.align(Alignment.End)) {
                 Text(text = "Create a category")
             }
             Button(onClick = {

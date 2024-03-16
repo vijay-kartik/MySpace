@@ -9,6 +9,7 @@ class MySpaceAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope
 ) {
+
     fun navigate(route: String) {
         navController.navigate(route) { launchSingleTop = true }
     }

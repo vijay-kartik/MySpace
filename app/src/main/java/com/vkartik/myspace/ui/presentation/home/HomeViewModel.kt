@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -70,6 +71,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             googleAuthUiClient.signOut()
             onSuccessfulSignOut()
+        }
+    }
+
+    fun showCategoryDialog(show: Boolean = true) {
+        _homeUiState.update {
+            it?.copy(showCategoryDialog = show)
         }
     }
 }
