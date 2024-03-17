@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.compose.ui:ui:1.4.3")
+    implementation(libs.firebase.firestore.ktx)
     androidTestImplementation(platform(libs.compose.bom))
 
 
@@ -88,6 +89,8 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation (libs.firebase.storage)
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.firestore)
 
     //hilt dependencies
     implementation(libs.hilt.android)

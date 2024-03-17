@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.vkartik.myspace.data.GoogleAuthUiClient
@@ -24,5 +25,8 @@ object FirebaseModule {
 
     @Provides
     fun firebaseStorage() = FirebaseStorage.getInstance()
+
+    @Provides
+    fun firebaseFirestore() = Firebase.firestore
 
 }

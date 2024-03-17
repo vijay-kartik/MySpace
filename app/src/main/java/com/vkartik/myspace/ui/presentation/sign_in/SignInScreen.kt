@@ -1,12 +1,9 @@
 package com.vkartik.myspace.ui.presentation.sign_in
 
-import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,18 +18,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.core.ui.extensions.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import com.example.core.ui.extensions.showToast
-import com.vkartik.myspace.R
-import com.vkartik.myspace.ui.utils.resizeBitmap
 
 @Composable
 fun SignInScreen(

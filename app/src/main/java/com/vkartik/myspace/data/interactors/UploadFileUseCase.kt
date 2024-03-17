@@ -8,22 +8,34 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class UploadFileUseCase @Inject constructor(private val firebaseStorage: FirebaseStorage) {
-    fun execute(filePath: String?) {
-        if (filePath == null) return
-        val fileUri = Uri.fromFile(File(filePath))
-        val storageRef = firebaseStorage.reference
-        val imagesRef = storageRef.child("images/sample_image.jpg")
-        CoroutineScope(Dispatchers.IO).launch {
-            val uploadTask = imagesRef.putFile(fileUri)
-            uploadTask.addOnSuccessListener {
-                Log.e("UploadUseCase", "upload complete")
-            }.addOnCanceledListener {
-                Log.e("UploadUseCase", "upload canceled")
-            }.addOnFailureListener {
-                Log.e("UploadUseCase", "upload failed")
+class UploadFileUseCase @Inject constructor(
+    private val firebaseStorage: FirebaseStorage
+) {
+    suspend fun execute(filePath: String?): String? {
+        if (filePath == null) return null
+
+        return suspendCoroutine { continuation ->
+            val fileUri = Uri.fromFile(File(filePath))
+            val storagePath = "images/" + System.currentTimeMillis() + ".jpg"
+            val storageRef = firebaseStorage.reference
+            val imagesRef = storageRef.child(storagePath)
+            CoroutineScope(Dispatchers.IO).launch {
+                val uploadTask = imagesRef.putFile(fileUri)
+                uploadTask.addOnSuccessListener {
+                    Log.e("UploadUseCase", "upload complete")
+                    continuation.resume(storagePath)
+                }.addOnCanceledListener {
+                    Log.e("UploadUseCase", "upload canceled")
+                    continuation.resume(null)
+                }.addOnFailureListener {
+                    Log.e("UploadUseCase", "upload failed")
+                    continuation.resume(null)
+                }
             }
         }
+
     }
 }
