@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,7 +37,9 @@ import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryDialog
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
 import com.vkartik.myspace.ui.presentation.home.components.ProfileIconButton
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +76,8 @@ fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltVi
             content = { paddingValues ->
                 HomeContent(
                     viewModel = viewModel,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues),
+                    coroutineScope = coroutineScope
                 )
             }
         )
@@ -84,7 +88,8 @@ fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltVi
 @Composable
 fun HomeContent(
     viewModel: HomeViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    coroutineScope: CoroutineScope
 ) {
     val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
     Box(
@@ -102,14 +107,13 @@ fun HomeContent(
             Button(onClick = { viewModel.showCategoryDialog() }, modifier = Modifier.align(Alignment.End)) {
                 Text(text = "Create a category")
             }
-
-            CategoryList(homeUiState)
+            CategoryList(homeUiState, viewModel, coroutineScope)
         }
     }
 }
 
 @Composable
-fun CategoryList(homeUiState: HomeUiState?) {
+fun CategoryList(homeUiState: HomeUiState?, viewModel: HomeViewModel, coroutineScope: CoroutineScope) {
     if (homeUiState?.categoryList?.isNotEmpty() == true) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 130.dp),
@@ -117,7 +121,7 @@ fun CategoryList(homeUiState: HomeUiState?) {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(homeUiState.categoryList.size) { index ->
-                CategoryCard(homeUiState.categoryList[index])
+                CategoryCard(homeUiState.categoryList[index], coroutineScope, viewModel)
             }
         }
     }

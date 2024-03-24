@@ -20,14 +20,13 @@ import com.example.core.ui.extensions.resizeBitmap
 
 @Composable
 fun RoundedCornerImage(
-    uri: Uri,
+    original: Bitmap,
     resizeWidth: Int,
     resizeHeight: Int,
     cornerRadius: Dp,
     borderWidth: Dp
 ) {
-    val bitmap = LocalContext.current.getBitmapFromUri(uri)
-    val resizedBitmap = resizeBitmap(bitmap, resizeWidth.dp, LocalDensity.current)
+    val resizedBitmap = resizeBitmap(original, resizeWidth.dp, LocalDensity.current)
     val toImageShape = RoundedCornerShape(cornerRadius)
     val borderStroke = BorderStroke(
         borderWidth, color = extractBorderColorFrom(

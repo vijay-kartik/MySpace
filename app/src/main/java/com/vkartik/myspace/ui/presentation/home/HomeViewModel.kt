@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.core.domain.Category
 import com.vkartik.myspace.data.GoogleAuthUiClient
 import com.vkartik.myspace.data.interactors.CreateCategoryUseCase
+import com.vkartik.myspace.data.interactors.GetCategoryImageUseCase
 import com.vkartik.myspace.data.interactors.UploadFileUseCase
 import com.vkartik.myspace.domain.GetCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ class HomeViewModel @Inject constructor(
     private val uploadFileUseCase: UploadFileUseCase,
     private val createCategoryUseCase: CreateCategoryUseCase,
     private val googleAuthUiClient: GoogleAuthUiClient,
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val getCategoryImageUseCase: GetCategoryImageUseCase
 ): ViewModel() {
     private val _homeUiState: MutableStateFlow<HomeUiState?> = MutableStateFlow(null)
     val homeUiState: StateFlow<HomeUiState?> get() = _homeUiState
@@ -54,10 +56,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onCategoryCreated(selectedImageUri: Uri?, categoryName: String) {
+    fun createCategory(selectedImageUri: Uri?, categoryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val storagePath = uploadFileUseCase.execute(selectedImageUri?.toString())
-            val category = Category(uid = "cat" + "_" + System.currentTimeMillis(), categoryName, selectedImageUri, storagePath)
+            val storagePath = uploadFileUseCase.execute(selectedImageUri)
+            val category = Category(uid = "cat" + "_" + System.currentTimeMillis(), categoryName, storagePath)
             val created = createCategoryUseCase.execute(category)
             if (created) {
                 _homeUiState.update {oldState ->
@@ -67,8 +69,13 @@ class HomeViewModel @Inject constructor(
                         oldState.copy(categoryList = this)
                     }
                 }
+                showCategoryDialog(false)
             }
         }
+    }
+
+    suspend fun getCategoryImage(storagePath: String): String? {
+        return getCategoryImageUseCase.execute(storagePath)
     }
 
 

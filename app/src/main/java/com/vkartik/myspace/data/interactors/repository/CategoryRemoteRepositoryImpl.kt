@@ -19,7 +19,6 @@ class CategoryRemoteRepositoryImpl @Inject constructor(
             val categoryDoc = hashMapOf(
                 "uid" to category.uid,
                 "name" to category.name,
-                "imageUri" to category.imageUri,
                 "storagePath" to category.storagePath
             )
             db.collection("users").document("${firebaseAuth.uid}").collection("categories")
@@ -35,7 +34,7 @@ class CategoryRemoteRepositoryImpl @Inject constructor(
     override suspend fun getAllCategories(): List<Category> {
         return suspendCoroutine { continuation ->
             db.collection("users").document("${firebaseAuth.uid}").collection("categories").get().addOnSuccessListener {
-                val categories = it.map { queryDocumentSnapshot -> Category(uid = queryDocumentSnapshot["uid"] as String, name = queryDocumentSnapshot["name"] as String, imageUri = (queryDocumentSnapshot["imageUri"] as String?)?.toUri()) }
+                val categories = it.map { queryDocumentSnapshot -> Category(uid = queryDocumentSnapshot["uid"] as String, name = queryDocumentSnapshot["name"] as String, storagePath = queryDocumentSnapshot["storagePath"] as String?) }
                 continuation.resume(categories)
             }.addOnFailureListener {
                 Log.i("kartikd", "exception : ${it.message}")

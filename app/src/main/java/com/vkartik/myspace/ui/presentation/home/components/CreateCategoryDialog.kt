@@ -1,7 +1,6 @@
 package com.vkartik.myspace.ui.presentation.home.components
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,9 +24,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.example.core.ui.components.RoundedCornerImage
+import com.example.core.ui.extensions.getBitmapFromUri
 import com.vkartik.myspace.ui.presentation.home.HomeViewModel
 
 @Composable
@@ -61,8 +62,9 @@ fun CreateCategoryDialog(viewModel: HomeViewModel, onDismiss: () -> Unit) {
                         Text(text = "Choose an image")
                     }
                     selectedImageUri?.let {
+                        val bitmap = LocalContext.current.getBitmapFromUri(it)
                         RoundedCornerImage(
-                            uri = it,
+                            original = bitmap,
                             resizeWidth = 40,
                             resizeHeight = 40,
                             cornerRadius = 4.dp,
@@ -74,7 +76,6 @@ fun CreateCategoryDialog(viewModel: HomeViewModel, onDismiss: () -> Unit) {
 
         },
         onDismissRequest = {
-            Log.i("kartikd", "dismiss")
             onDismiss()
         }, confirmButton = {
             Text(
@@ -86,8 +87,7 @@ fun CreateCategoryDialog(viewModel: HomeViewModel, onDismiss: () -> Unit) {
                     .clickable(
                         enabled = if (categoryName.isNotEmpty()) true else false,
                         onClick = {
-                            viewModel.onCategoryCreated(selectedImageUri, categoryName)
-                            onDismiss()
+                            viewModel.createCategory(selectedImageUri, categoryName)
                         }
                     )
             )
