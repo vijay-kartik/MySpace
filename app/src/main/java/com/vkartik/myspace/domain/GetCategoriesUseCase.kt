@@ -1,6 +1,7 @@
 package com.vkartik.myspace.domain
 
-import com.vkartik.myspace.domain.repository.CategoryRepository
+import com.example.core.data.interactors.CategoryRepository
+import com.example.core.domain.Category
 import javax.inject.Inject
 
 class GetCategoriesUseCase @Inject constructor(

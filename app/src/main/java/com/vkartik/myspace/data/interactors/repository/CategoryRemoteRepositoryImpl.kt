@@ -2,10 +2,10 @@ package com.vkartik.myspace.data.interactors.repository
 
 import android.util.Log
 import androidx.core.net.toUri
+import com.example.core.data.interactors.CategoryRepository
+import com.example.core.domain.Category
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.vkartik.myspace.domain.Category
-import com.vkartik.myspace.domain.repository.CategoryRepository
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -16,11 +16,11 @@ class CategoryRemoteRepositoryImpl @Inject constructor(
 ) : CategoryRepository {
     override suspend fun createCategory(category: Category): Boolean {
         return suspendCoroutine { continuation ->
-            val categoryId = "cat" + "_" + System.currentTimeMillis()
             val categoryDoc = hashMapOf(
-                "uid" to categoryId,
+                "uid" to category.uid,
                 "name" to category.name,
-                "imageUri" to category.imageUri
+                "imageUri" to category.imageUri,
+                "storagePath" to category.storagePath
             )
             db.collection("users").document("${firebaseAuth.uid}").collection("categories")
                 .add(categoryDoc).addOnSuccessListener {
@@ -35,7 +35,7 @@ class CategoryRemoteRepositoryImpl @Inject constructor(
     override suspend fun getAllCategories(): List<Category> {
         return suspendCoroutine { continuation ->
             db.collection("users").document("${firebaseAuth.uid}").collection("categories").get().addOnSuccessListener {
-                val categories = it.map { queryDocumentSnapshot -> Category(name = queryDocumentSnapshot["name"] as String, imageUri = (queryDocumentSnapshot["imageUri"] as String?)?.toUri()) }
+                val categories = it.map { queryDocumentSnapshot -> Category(uid = queryDocumentSnapshot["uid"] as String, name = queryDocumentSnapshot["name"] as String, imageUri = (queryDocumentSnapshot["imageUri"] as String?)?.toUri()) }
                 continuation.resume(categories)
             }.addOnFailureListener {
                 Log.i("kartikd", "exception : ${it.message}")

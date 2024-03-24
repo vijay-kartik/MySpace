@@ -31,7 +31,7 @@ fun MySpaceNavHost(appState: MySpaceAppState, startDestination: String) {
         }
 
         composable(Screens.HOME.route) {
-            HomeScreen {
+            HomeScreen(appState.coroutineScope) {
                 appState.navigateAndPopUp(Screens.SIGN_IN.route, Screens.HOME.route)
             }
         }

@@ -3,10 +3,10 @@ package com.vkartik.myspace.ui.presentation.home
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.domain.Category
 import com.vkartik.myspace.data.GoogleAuthUiClient
 import com.vkartik.myspace.data.interactors.CreateCategoryUseCase
 import com.vkartik.myspace.data.interactors.UploadFileUseCase
-import com.vkartik.myspace.domain.Category
 import com.vkartik.myspace.domain.GetCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
     fun onCategoryCreated(selectedImageUri: Uri?, categoryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val storagePath = uploadFileUseCase.execute(selectedImageUri?.toString())
-            val category = Category(categoryName, selectedImageUri, storagePath)
+            val category = Category(uid = "cat" + "_" + System.currentTimeMillis(), categoryName, selectedImageUri, storagePath)
             val created = createCategoryUseCase.execute(category)
             if (created) {
                 _homeUiState.update {oldState ->

@@ -1,7 +1,7 @@
 package com.vkartik.myspace.data.interactors
 
-import com.vkartik.myspace.domain.Category
-import com.vkartik.myspace.domain.repository.CategoryRepository
+import com.example.core.data.interactors.CategoryRepository
+import com.example.core.domain.Category
 import javax.inject.Inject
 
 class CreateCategoryUseCase @Inject constructor(

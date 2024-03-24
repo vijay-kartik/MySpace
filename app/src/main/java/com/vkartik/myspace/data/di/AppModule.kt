@@ -1,8 +1,8 @@
 package com.vkartik.myspace.data.di
 
 import android.content.Context
+import com.example.core.data.interactors.CategoryRepository
 import com.vkartik.myspace.data.interactors.repository.CategoryRemoteRepositoryImpl
-import com.vkartik.myspace.domain.repository.CategoryRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

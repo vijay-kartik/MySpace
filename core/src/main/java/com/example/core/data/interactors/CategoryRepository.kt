@@ -1,6 +1,6 @@
-package com.vkartik.myspace.domain.repository
+package com.example.core.data.interactors
 
-import com.vkartik.myspace.domain.Category
+import com.example.core.domain.Category
 
 interface CategoryRepository {
     suspend fun createCategory(category: Category): Boolean

@@ -35,16 +35,16 @@ import com.vkartik.myspace.ui.presentation.home.components.CategoryCard
 import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryDialog
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
 import com.vkartik.myspace.ui.presentation.home.components.ProfileIconButton
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn: () -> Unit) {
+fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn: () -> Unit) {
     val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
 
     viewModel.fetchSignedInUserData()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val coroutineScope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
         drawerState = drawerState,

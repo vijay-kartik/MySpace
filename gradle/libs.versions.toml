@@ -1,40 +1,46 @@
 
-
-
-
 [versions]
 agp = "8.2.0"
 coil = "2.6.0"
 colorthief = "2.1.1"
 datastore = "1.0.0"
-firebase-bom = "32.7.4"
+firebase-bom = "32.8.0"
 firebase-storage = "20.3.0"
-google-services = "4.4.0"
-hilt-android-compiler = "2.48"
-hilt-navigation-compose = "1.1.0"
-kotlin = "1.9.0"
+google-services = "4.4.1"
+hilt-android-compiler = "2.51"
+hilt-navigation-compose = "1.2.0"
+kotlin = "1.9.23"
 core-ktx = "1.12.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-lifecycle-runtime-ktx = "2.6.2"
+lifecycle-runtime-ktx = "2.7.0"
 activity-compose = "1.8.2"
-compose-bom = "2023.10.01"
-firebase-auth = "22.3.0"
-navigation-compose = "2.7.6"
+compose-bom = "2024.03.00"
+firebase-auth = "22.3.1"
+material-version = "1.6.4"
+navigation-compose = "2.7.7"
 palette = "1.0.0"
-play-services-auth = "20.7.0"
-protobuf-kotlin-lite = "3.18.0"
+play-services-auth = "21.0.0"
+protobuf-kotlin-lite = "3.23.4"
 appcompat = "1.6.1"
-material = "1.10.0"
-firebase-firestore-ktx = "24.10.3"
+material = "1.11.0"
+firebase-firestore-ktx = "24.11.0"
+room-runtime = "2.6.1"
+ui = "1.6.4"
 
 [libraries]
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
+androidx-material = { module = "androidx.compose.material:material", version.ref = "material-version" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room-runtime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room-runtime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room-runtime" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room-runtime" }
+androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 colorthief = { module = "com.github.nyan:colorthief", version.ref = "colorthief" }
@@ -71,4 +77,3 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android-compiler" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-

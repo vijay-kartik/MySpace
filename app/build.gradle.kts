@@ -1,11 +1,11 @@
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     id("com.google.gms.google-services")
-    kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id("com.google.protobuf") version "0.9.3"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -45,17 +45,11 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    sourceSets {
-        getByName("main") {
-            java.srcDir("src/main/proto")
         }
     }
 }
@@ -73,8 +67,8 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation("androidx.compose.material:material:1.4.3")
-    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.ui)
     implementation(libs.firebase.firestore.ktx)
     androidTestImplementation(platform(libs.compose.bom))
 
@@ -94,13 +88,11 @@ dependencies {
 
     //hilt dependencies
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     //data store dependencies
     implementation(libs.androidx.datastore)
-//    implementation(libs.protobuf.kotlin.lite)
-    implementation(libs.protobuf.javalite)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
@@ -111,24 +103,9 @@ dependencies {
     //image libraries
     implementation(libs.androidx.palette)
     implementation(libs.coil.compose)
-}
 
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
-}
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.14.0"
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                register("java") {
-                    option("lite")
-                }
-            }
-        }
-    }
+    //room deps
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
 }

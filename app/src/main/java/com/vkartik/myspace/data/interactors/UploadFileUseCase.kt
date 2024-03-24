@@ -31,7 +31,7 @@ class UploadFileUseCase @Inject constructor(
                     Log.e("UploadUseCase", "upload canceled")
                     continuation.resume(null)
                 }.addOnFailureListener {
-                    Log.e("UploadUseCase", "upload failed")
+                    Log.e("UploadUseCase", "upload failed ${it.message} ${it.localizedMessage}")
                     continuation.resume(null)
                 }
             }
