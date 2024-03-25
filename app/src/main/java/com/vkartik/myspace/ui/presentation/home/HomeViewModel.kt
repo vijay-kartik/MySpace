@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,9 +31,11 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val categories = getCategoriesUseCase.execute()
-            _homeUiState.update {
-                it?.copy(categoryList = categories.toMutableList())
+            val categoriesList = getCategoriesUseCase.execute()
+            categoriesList.collectLatest { categories ->
+                _homeUiState.update {
+                    it?.copy(categoryList = categories.toMutableList())
+                }
             }
         }
     }

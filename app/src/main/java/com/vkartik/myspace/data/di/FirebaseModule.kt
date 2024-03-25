@@ -23,10 +23,4 @@ object FirebaseModule {
     fun googleAuthUiClient(@ApplicationContext appContext: Context): GoogleAuthUiClient =
         GoogleAuthUiClient(appContext, Identity.getSignInClient(appContext))
 
-    @Provides
-    fun firebaseStorage() = FirebaseStorage.getInstance()
-
-    @Provides
-    fun firebaseFirestore() = Firebase.firestore
-
 }

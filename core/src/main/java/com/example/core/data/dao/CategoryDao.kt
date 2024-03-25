@@ -15,4 +15,10 @@ interface CategoryDao {
 
     @Insert(CategoryEntity::class, OnConflictStrategy.REPLACE)
     suspend fun insert(category: CategoryEntity)
+
+    @Query("DELETE FROM categories")
+    suspend fun deleteAll()
+
+    @Query("DELETE from categories where name = :name")
+    suspend fun deleteByName(name: String)
 }

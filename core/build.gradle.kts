@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
 }
 
@@ -71,4 +72,12 @@ dependencies {
 
     //image libraries
     implementation(libs.androidx.palette)
+
+    //firebase dependencies
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+    implementation (libs.firebase.storage)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.firestore.ktx)
 }

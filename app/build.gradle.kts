@@ -69,7 +69,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.material)
     implementation(libs.androidx.ui)
-    implementation(libs.firebase.firestore.ktx)
     androidTestImplementation(platform(libs.compose.bom))
 
 
@@ -85,6 +84,7 @@ dependencies {
     implementation (libs.firebase.storage)
     implementation(libs.firebase.bom)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.firestore.ktx)
 
     //hilt dependencies
     implementation(libs.hilt.android)

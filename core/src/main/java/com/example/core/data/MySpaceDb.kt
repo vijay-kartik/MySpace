@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.core.data.dao.CategoryDao
 import com.example.core.data.entity.CategoryEntity
 
-@Database(entities = [CategoryEntity::class], version = 1)
+@Database(entities = [CategoryEntity::class], version = 1, exportSchema = false)
 abstract class MySpaceDb: RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
 
