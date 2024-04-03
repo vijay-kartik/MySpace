@@ -24,11 +24,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,16 +34,14 @@ import com.vkartik.myspace.ui.presentation.home.components.CategoryCard
 import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryDialog
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
 import com.vkartik.myspace.ui.presentation.home.components.ProfileIconButton
+import com.vkartik.myspace.ui.presentation.sign_in.UserData
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn: () -> Unit) {
-    val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
-
+    val userData: UserData? by viewModel.userData.collectAsStateWithLifecycle()
     viewModel.fetchSignedInUserData()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -66,7 +62,7 @@ fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltVi
                     }
                 },
                 actions = {
-                    ProfileIconButton(userData = homeUiState?.userData) {
+                    ProfileIconButton(userData = userData) {
                         viewModel.signOut { navigateBackToSignIn() }
                     }
                 },

@@ -18,8 +18,8 @@ class CategoryRepositoryImpl @Inject constructor(
             val created = remoteDataSource.createCategory(category)
             if (created) {
                 localDataSource.insert(category.toEntity())
-            }
-            return true
+                return true
+            } else return false
         } catch (e: Exception) {
             return false
         }

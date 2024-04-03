@@ -9,6 +9,7 @@ import com.vkartik.myspace.data.interactors.CreateCategoryUseCase
 import com.vkartik.myspace.data.interactors.GetCategoryImageUseCase
 import com.vkartik.myspace.data.interactors.UploadFileUseCase
 import com.vkartik.myspace.domain.GetCategoriesUseCase
+import com.vkartik.myspace.ui.presentation.sign_in.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,16 +26,19 @@ class HomeViewModel @Inject constructor(
     private val googleAuthUiClient: GoogleAuthUiClient,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getCategoryImageUseCase: GetCategoryImageUseCase
-): ViewModel() {
-    private val _homeUiState: MutableStateFlow<HomeUiState?> = MutableStateFlow(null)
+) : ViewModel() {
+    private val _homeUiState: MutableStateFlow<HomeUiState?> = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState?> get() = _homeUiState
+
+    private val _userData: MutableStateFlow<UserData?> = MutableStateFlow(null)
+    val userData: StateFlow<UserData?> get() = _userData
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             val categoriesList = getCategoriesUseCase.execute()
             categoriesList.collectLatest { categories ->
                 _homeUiState.update {
-                    it?.copy(categoryList = categories.toMutableList())
+                    it?.copy(categoryList = categories)
                 }
             }
         }
@@ -42,7 +46,7 @@ class HomeViewModel @Inject constructor(
 
     fun fetchSignedInUserData() {
         googleAuthUiClient.getSignedInUser()?.let {
-            _homeUiState.value = HomeUiState(it)
+            _userData.value = it
         }
     }
 
@@ -62,10 +66,11 @@ class HomeViewModel @Inject constructor(
     fun createCategory(selectedImageUri: Uri?, categoryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val storagePath = uploadFileUseCase.execute(selectedImageUri)
-            val category = Category(uid = "cat" + "_" + System.currentTimeMillis(), categoryName, storagePath)
+            val category =
+                Category(uid = "cat" + "_" + System.currentTimeMillis(), categoryName, storagePath)
             val created = createCategoryUseCase.execute(category)
             if (created) {
-                _homeUiState.update {oldState ->
+                _homeUiState.update { oldState ->
                     val newList = oldState?.categoryList?.toMutableList()
                     newList?.run {
                         add(category)
