@@ -36,6 +36,9 @@ class HomeViewModel @Inject constructor(
     private val _userData: MutableStateFlow<UserData?> = MutableStateFlow(null)
     val userData: StateFlow<UserData?> get() = _userData
 
+    private val _startProgress = MutableStateFlow(false)
+    val startProgress: StateFlow<Boolean> get() = _startProgress
+
     fun fetchSignedInUserData() {
         googleAuthUiClient.getSignedInUser()?.let {
             _userData.value = it
@@ -60,11 +63,13 @@ class HomeViewModel @Inject constructor(
 
     fun createCategory(selectedImageUri: Uri?, categoryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _startProgress.value = true
             val storagePath = uploadFileUseCase.execute(selectedImageUri)
             val category =
                 Category(uid = "cat" + "_" + System.currentTimeMillis(), categoryName, storagePath)
             val created = createCategoryUseCase.execute(category)
             if (created) {
+                _startProgress.value = false
                 _homeUiState.update { oldState ->
                     val newList = oldState?.categoryList?.toMutableList()
                     newList?.run {

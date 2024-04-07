@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.ui.components.RoundedCornerImage
 import com.example.core.ui.extensions.getBitmapFromUri
 import com.vkartik.myspace.ui.presentation.home.HomeViewModel
@@ -41,6 +43,7 @@ fun CreateCategoryDialog(viewModel: HomeViewModel, onDismiss: () -> Unit) {
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
             selectedImageUri = uri
         }
+    val showProgress by viewModel.startProgress.collectAsStateWithLifecycle()
     
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -55,6 +58,9 @@ fun CreateCategoryDialog(viewModel: HomeViewModel, onDismiss: () -> Unit) {
                     value = categoryName,
                     onValueChange = { categoryName = it }
                 )
+                if (showProgress) {
+                    LinearProgressIndicator(modifier = Modifier.widthIn(max = LocalConfiguration.current.screenWidthDp.dp - 90.dp))
+                }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Button(onClick = {
                         launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
