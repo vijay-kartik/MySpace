@@ -35,6 +35,8 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material-version" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-compose" }
+navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-compose" }
 androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room-runtime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room-runtime" }
@@ -77,3 +79,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android-compiler" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation-compose" }

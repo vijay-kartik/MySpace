@@ -1,7 +1,5 @@
 package com.vkartik.myspace
 
-import android.content.res.Resources
-import androidx.compose.material.ScaffoldState
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 

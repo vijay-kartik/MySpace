@@ -16,4 +16,13 @@ class CategoryLocalDataSource @Inject constructor(
     fun getAllCategories(): Flow<List<CategoryEntity>> {
         return categoryDao.getAll()
     }
+
+    suspend fun insertAll(categories: List<CategoryEntity>) {
+        categoryDao.insertAll(categories)
+    }
+
+    suspend fun deleteAll() {
+        categoryDao.deleteAll()
+    }
+
 }

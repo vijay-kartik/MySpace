@@ -25,9 +25,17 @@ class CategoryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllCategories(): Flow<List<Category>> {
+    override suspend fun getAllCategories(newUser: Boolean): Flow<List<Category>> {
+        if (newUser) {
+            val categories = remoteDataSource.getAllCategories()
+            localDataSource.insertAll(categories.map { it.toEntity() })
+        }
         return localDataSource.getAllCategories().map { categories ->
             categories.map { it.toDomain() }
         }
+    }
+
+    override suspend fun clearData() {
+        localDataSource.deleteAll()
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,10 +41,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltViewModel(), navigateBackToSignIn: () -> Unit) {
+fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltViewModel(), newUser: Boolean = false, navigateBackToSignIn: () -> Unit) {
     val userData: UserData? by viewModel.userData.collectAsStateWithLifecycle()
-    viewModel.fetchSignedInUserData()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+    LaunchedEffect(true) {
+        viewModel.fetchSignedInUserData()
+        viewModel.fetchCategoriesList(newUser)
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,

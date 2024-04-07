@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navigateToHome: () -> Unit
+    navigateToHome: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val state: SignInState by viewModel.state.collectAsStateWithLifecycle()
@@ -49,7 +49,7 @@ fun SignInScreen(
 
     LaunchedEffect(key1 = state) {
         if (state.isUserSignedIn || state.isSignInSuccess) {
-            navigateToHome()
+            navigateToHome(state.isSignInSuccess)
             viewModel.resetState()
         }
         state.signInError?.let { error ->

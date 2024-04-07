@@ -4,6 +4,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
+    alias(libs.plugins.safeargs)
 }
 
 android {
@@ -54,6 +55,8 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.navigation.ui)
+    implementation(libs.navigation.fragment)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.material)
     implementation(libs.androidx.ui)
