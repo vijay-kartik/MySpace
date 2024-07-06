@@ -44,9 +44,15 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(appState: MySpaceAppState, viewModel: HomeViewModel = hiltViewModel(), newUser: Boolean = false, navigateBackToSignIn: () -> Unit) {
+fun HomeScreen(
+    appState: MySpaceAppState,
+    viewModel: HomeViewModel = hiltViewModel(),
+    newUser: Boolean = false,
+    navigateBackToSignIn: () -> Unit
+) {
     val userData: UserData? by viewModel.userData.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         viewModel.fetchSignedInUserData()
@@ -56,10 +62,17 @@ fun HomeScreen(appState: MySpaceAppState, viewModel: HomeViewModel = hiltViewMod
     ModalNavigationDrawer(
         drawerState = drawerState,
         scrimColor = Color.Transparent,
-        drawerContent = { DrawerContent { subScreen -> viewModel.onDrawerItemClicked(subScreen) } }) {
+        drawerContent = {
+            DrawerContent { subScreen ->
+                viewModel.onDrawerItemClicked(subScreen)
+                appState.coroutineScope.launch {
+                    drawerState.close()
+                }
+            }
+        }) {
         Scaffold(topBar = {
             TopAppBar(
-                title = { Text("My Space") },
+                title = { Text(homeUiState?.currentScreen?.name ?: "My Space") },
                 navigationIcon = {
                     IconButton(onClick = {
                         appState.coroutineScope.launch {
@@ -111,7 +124,10 @@ fun HomeContent(
             SubScreens.DEFAULT -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { viewModel.showCategoryDialog() }, modifier = Modifier.align(Alignment.End)) {
+                    Button(
+                        onClick = { viewModel.showCategoryDialog() },
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
                         Text(text = "Create a category")
                     }
                     CategoryList(homeUiState, viewModel, coroutineScope)
@@ -128,7 +144,11 @@ fun HomeContent(
 }
 
 @Composable
-fun CategoryList(homeUiState: HomeUiState?, viewModel: HomeViewModel, coroutineScope: CoroutineScope) {
+fun CategoryList(
+    homeUiState: HomeUiState?,
+    viewModel: HomeViewModel,
+    coroutineScope: CoroutineScope
+) {
     if (homeUiState?.categoryList?.isNotEmpty() == true) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 130.dp),
