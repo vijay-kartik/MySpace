@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.vkartik.myspace.MySpaceAppState
 import com.vkartik.myspace.ui.presentation.Screens
+import com.vkartik.myspace.ui.presentation.expenses.ExpensesScreen
 import com.vkartik.myspace.ui.presentation.home.HomeScreen
 import com.vkartik.myspace.ui.presentation.sign_in.SignInScreen
 
@@ -25,9 +26,13 @@ fun MySpaceNavHost(appState: MySpaceAppState, startDestination: String) {
             }
         )) {
             val newUser = it.arguments?.getBoolean("newUser") ?: false
-            HomeScreen(appState.coroutineScope, newUser = newUser) {
+            HomeScreen(appState, newUser = newUser) {
                 appState.navigateAndPopUp(Screens.SIGN_IN.route, Screens.HOME.route)
             }
+        }
+
+        composable("expenses") {
+            ExpensesScreen()
         }
     }
 }

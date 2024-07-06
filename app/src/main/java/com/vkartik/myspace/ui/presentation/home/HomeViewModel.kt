@@ -10,6 +10,7 @@ import com.vkartik.myspace.data.interactors.GetCategoryImageUseCase
 import com.vkartik.myspace.data.interactors.UploadFileUseCase
 import com.vkartik.myspace.domain.ClearUserDataUseCase
 import com.vkartik.myspace.domain.GetCategoriesUseCase
+import com.vkartik.myspace.ui.presentation.SubScreens
 import com.vkartik.myspace.ui.presentation.sign_in.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,10 @@ class HomeViewModel @Inject constructor(
 
     private val _startProgress = MutableStateFlow(false)
     val startProgress: StateFlow<Boolean> get() = _startProgress
+
+    fun onDrawerItemClicked(subScreen: SubScreens) {
+        _homeUiState.update { it?.copy(currentScreen = subScreen) }
+    }
 
     fun fetchSignedInUserData() {
         googleAuthUiClient.getSignedInUser()?.let {

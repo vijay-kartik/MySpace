@@ -31,6 +31,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vkartik.myspace.MySpaceAppState
+import com.vkartik.myspace.ui.presentation.SubScreens
+import com.vkartik.myspace.ui.presentation.expenses.ExpensesScreen
 import com.vkartik.myspace.ui.presentation.home.components.CategoryCard
 import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryDialog
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
@@ -41,7 +44,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltViewModel(), newUser: Boolean = false, navigateBackToSignIn: () -> Unit) {
+fun HomeScreen(appState: MySpaceAppState, viewModel: HomeViewModel = hiltViewModel(), newUser: Boolean = false, navigateBackToSignIn: () -> Unit) {
     val userData: UserData? by viewModel.userData.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -53,13 +56,13 @@ fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltVi
     ModalNavigationDrawer(
         drawerState = drawerState,
         scrimColor = Color.Transparent,
-        drawerContent = { DrawerContent() }) {
+        drawerContent = { DrawerContent { subScreen -> viewModel.onDrawerItemClicked(subScreen) } }) {
         Scaffold(topBar = {
             TopAppBar(
                 title = { Text("My Space") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        coroutineScope.launch {
+                        appState.coroutineScope.launch {
                             drawerState.open()
                         }
                     }) {
@@ -78,7 +81,7 @@ fun HomeScreen(coroutineScope: CoroutineScope, viewModel: HomeViewModel = hiltVi
                 HomeContent(
                     viewModel = viewModel,
                     modifier = Modifier.padding(paddingValues),
-                    coroutineScope = coroutineScope
+                    coroutineScope = appState.coroutineScope
                 )
             }
         )
@@ -103,12 +106,23 @@ fun HomeContent(
                 viewModel.showCategoryDialog(false)
             }
         }
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { viewModel.showCategoryDialog() }, modifier = Modifier.align(Alignment.End)) {
-                Text(text = "Create a category")
+
+        when (homeUiState?.currentScreen) {
+            SubScreens.DEFAULT -> {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { viewModel.showCategoryDialog() }, modifier = Modifier.align(Alignment.End)) {
+                        Text(text = "Create a category")
+                    }
+                    CategoryList(homeUiState, viewModel, coroutineScope)
+                }
             }
-            CategoryList(homeUiState, viewModel, coroutineScope)
+
+            SubScreens.EXPENSES -> {
+                ExpensesScreen()
+            }
+
+            else -> {}
         }
     }
 }
