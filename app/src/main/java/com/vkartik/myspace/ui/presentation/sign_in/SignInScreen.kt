@@ -77,11 +77,14 @@ fun SignInScreen(
                         }
 
                         val signInIntent = viewModel.getSignInIntent()
-                        launcher.launch(
-                            IntentSenderRequest.Builder(
-                                signInIntent ?: return@launch
-                            ).build()
-                        )
+                        signInIntent?.let {
+                            launcher.launch(
+                                IntentSenderRequest.Builder(
+                                    signInIntent
+                                ).build()
+                            )
+                        } ?: context.showToast("Can't sign in due to internal error.")
+
                     }
                 }) {
                     Text("SignIn")
