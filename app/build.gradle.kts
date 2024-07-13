@@ -82,9 +82,12 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation (libs.firebase.storage)
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.firestore.ktx)
+
+    //vertex ai
+    implementation(libs.firebase.vertexai)
 
     //hilt dependencies
     implementation(libs.hilt.android)

@@ -4,9 +4,10 @@ agp = "8.2.0"
 coil = "2.6.0"
 colorthief = "2.1.1"
 datastore = "1.0.0"
-firebase-bom = "32.8.0"
-firebase-storage = "20.3.0"
-google-services = "4.4.1"
+firebase-bom = "33.1.2"
+firebase-storage = "21.0.0"
+firebase-vertexai = "16.0.0-beta02"
+google-services = "4.4.2"
 hilt-android-compiler = "2.51"
 hilt-navigation-compose = "1.2.0"
 kotlin = "1.9.23"
@@ -17,7 +18,7 @@ espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.7.0"
 activity-compose = "1.8.2"
 compose-bom = "2024.03.00"
-firebase-auth = "22.3.1"
+firebase-auth = "23.0.0"
 material-version = "1.6.4"
 navigation-compose = "2.7.7"
 palette = "1.0.0"
@@ -25,7 +26,7 @@ play-services-auth = "21.0.0"
 protobuf-kotlin-lite = "3.23.4"
 appcompat = "1.6.1"
 material = "1.11.0"
-firebase-firestore-ktx = "24.11.0"
+firebase-firestore-ktx = "25.0.0"
 room-runtime = "2.6.1"
 ui = "1.6.4"
 
@@ -35,6 +36,7 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle-runtime-ktx" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material-version" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+firebase-vertexai = { module = "com.google.firebase:firebase-vertexai", version.ref = "firebase-vertexai" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-compose" }
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-compose" }
 androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }

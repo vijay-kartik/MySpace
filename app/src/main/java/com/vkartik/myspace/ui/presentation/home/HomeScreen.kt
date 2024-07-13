@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -110,18 +111,17 @@ fun HomeContent(
 ) {
     val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
     Box(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxWidth(), contentAlignment = Alignment.TopStart
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopStart
     ) {
-        if (homeUiState?.showCategoryDialog == true) {
-            CreateCategoryDialog(viewModel = viewModel) {
-                viewModel.showCategoryDialog(false)
-            }
-        }
 
         when (homeUiState?.currentScreen) {
             SubScreens.DEFAULT -> {
+                if (homeUiState?.showCategoryDialog == true) {
+                    CreateCategoryDialog(viewModel = viewModel) {
+                        viewModel.showCategoryDialog(false)
+                    }
+                }
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
@@ -135,7 +135,7 @@ fun HomeContent(
             }
 
             SubScreens.EXPENSES -> {
-                ExpensesScreen()
+                ExpensesScreen(modifier = Modifier.fillMaxSize().padding(top = 10.dp))
             }
 
             else -> {}
