@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -51,7 +52,7 @@ fun CreateCategoryDialog(viewModel: HomeViewModel, onDismiss: () -> Unit) {
         title = { Text(text = "Create Category") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Divider()
+                HorizontalDivider()
                 TextField(
                     placeholder = { Text(text = "Enter category name") },
                     label = { Text(text = "Name") },
