@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -31,7 +32,7 @@ fun ExpensesActionCard(modifier: Modifier, title: String, onClicked: () -> Unit)
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = title)
+            Text(text = title, textAlign = TextAlign.Center)
         }
     }
 }
@@ -50,7 +51,7 @@ fun ExpensesActionCardPreview() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Card Contents")
+            Text(text = "Card Contents longer", textAlign = TextAlign.Center)
         }
     }
 }
