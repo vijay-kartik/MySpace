@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vkartik.myspace.MySpaceAppState
 import com.vkartik.myspace.ui.presentation.SubScreens
 import com.vkartik.myspace.ui.presentation.expenses.ExpensesScreen
+import com.vkartik.myspace.ui.presentation.expenses.RecordTransactionScreen
 import com.vkartik.myspace.ui.presentation.home.components.CategoryCard
 import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryDialog
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
@@ -95,7 +96,7 @@ fun HomeScreen(
                 HomeContent(
                     viewModel = viewModel,
                     modifier = Modifier.padding(paddingValues),
-                    coroutineScope = appState.coroutineScope
+                    appState = appState
                 )
             }
         )
@@ -105,9 +106,9 @@ fun HomeScreen(
 
 @Composable
 fun HomeContent(
+    appState: MySpaceAppState,
     viewModel: HomeViewModel,
-    modifier: Modifier = Modifier,
-    coroutineScope: CoroutineScope
+    modifier: Modifier = Modifier
 ) {
     val homeUiState: HomeUiState? by viewModel.homeUiState.collectAsStateWithLifecycle()
     Box(
@@ -130,12 +131,16 @@ fun HomeContent(
                     ) {
                         Text(text = "Create a category")
                     }
-                    CategoryList(homeUiState, viewModel, coroutineScope)
+                    CategoryList(homeUiState, viewModel, appState.coroutineScope)
                 }
             }
 
             SubScreens.EXPENSES -> {
-                ExpensesScreen(modifier = Modifier.fillMaxSize().padding(top = 10.dp))
+                ExpensesScreen(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp)) {
+                    appState.navigate(SubScreens.RECORD_TRANSACTIONS.route)
+                }
             }
 
             else -> {}

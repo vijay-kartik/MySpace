@@ -7,7 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.vkartik.myspace.MySpaceAppState
 import com.vkartik.myspace.ui.presentation.Screens
+import com.vkartik.myspace.ui.presentation.SubScreens
 import com.vkartik.myspace.ui.presentation.expenses.ExpensesScreen
+import com.vkartik.myspace.ui.presentation.expenses.RecordTransactionScreen
 import com.vkartik.myspace.ui.presentation.home.HomeScreen
 import com.vkartik.myspace.ui.presentation.sign_in.SignInScreen
 
@@ -32,7 +34,12 @@ fun MySpaceNavHost(appState: MySpaceAppState, startDestination: String) {
         }
 
         composable("expenses") {
-            ExpensesScreen()
+            ExpensesScreen {
+                appState.navigate(SubScreens.RECORD_TRANSACTIONS.route)
+            }
+        }
+        composable(SubScreens.RECORD_TRANSACTIONS.route) {
+            RecordTransactionScreen()
         }
     }
 }
