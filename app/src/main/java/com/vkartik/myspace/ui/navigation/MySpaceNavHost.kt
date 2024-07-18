@@ -1,44 +1,55 @@
 package com.vkartik.myspace.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.vkartik.myspace.MySpaceAppState
-import com.vkartik.myspace.ui.presentation.Screens
-import com.vkartik.myspace.ui.presentation.SubScreens
 import com.vkartik.myspace.ui.presentation.expenses.ExpensesScreen
 import com.vkartik.myspace.ui.presentation.expenses.RecordTransactionScreen
 import com.vkartik.myspace.ui.presentation.home.HomeScreen
 import com.vkartik.myspace.ui.presentation.sign_in.SignInScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class Routes {
+    @Serializable
+    data class Home(val newUser: Boolean): Routes()
+
+    @Serializable
+    data object SignIn: Routes()
+
+    @Serializable
+    data object Expenses: Routes()
+
+    @Serializable
+    data object RecordTransactions: Routes()
+}
+
 
 @Composable
-fun MySpaceNavHost(appState: MySpaceAppState, startDestination: String) {
+fun MySpaceNavHost(appState: MySpaceAppState, startDestination: Routes) {
+
     NavHost(navController = appState.navController, startDestination = startDestination) {
-        composable(route = Screens.SIGN_IN.route) {
+        composable<Routes.SignIn> {
             SignInScreen {isNewUser ->
-                appState.navigateAndPopUp("home?newUser=$isNewUser", Screens.SIGN_IN.route)
+                appState.navigateAndPopUp(Routes.Home(isNewUser), Routes.SignIn)
             }
         }
 
-        composable(route = "home?newUser={newUser}", arguments = listOf(
-            navArgument("newUser") {
-                type = NavType.BoolType
-            }
-        )) {
-            val newUser = it.arguments?.getBoolean("newUser") ?: false
-            HomeScreen(appState, newUser = newUser) {
-                appState.navigateAndPopUp(Screens.SIGN_IN.route, Screens.HOME.route)
+        composable<Routes.Home> { backStackEntry ->
+            val customValue = backStackEntry.toRoute<Routes.Home>()
+            HomeScreen(appState, newUser = customValue.newUser) {
+                appState.navigateAndPopUp(Routes.SignIn, Routes.Home(customValue.newUser))
             }
         }
 
-        composable("expenses") {
+        composable<Routes.Expenses> {
             ExpensesScreen {
-                appState.navigate(SubScreens.RECORD_TRANSACTIONS.route)
+                appState.navigate(Routes.RecordTransactions)
             }
         }
-        composable(SubScreens.RECORD_TRANSACTIONS.route) {
+        composable<Routes.RecordTransactions> {
             RecordTransactionScreen()
         }
     }
