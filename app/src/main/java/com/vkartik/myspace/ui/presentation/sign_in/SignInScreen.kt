@@ -1,6 +1,6 @@
 package com.vkartik.myspace.ui.presentation.sign_in
 
-import androidx.activity.ComponentActivity
+import android.app.Activity.RESULT_OK
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,7 +39,7 @@ fun SignInScreen(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult(),
         onResult = { result ->
-            if (result.resultCode == ComponentActivity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 coroutineScope.launch {
                     viewModel.startSignIn(result.data)
                 }

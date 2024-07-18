@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vkartik.myspace.MySpaceAppState
+import com.vkartik.myspace.ui.navigation.Routes
 import com.vkartik.myspace.ui.presentation.SubScreens
 import com.vkartik.myspace.ui.presentation.expenses.ExpensesScreen
-import com.vkartik.myspace.ui.presentation.expenses.RecordTransactionScreen
 import com.vkartik.myspace.ui.presentation.home.components.CategoryCard
 import com.vkartik.myspace.ui.presentation.home.components.CreateCategoryDialog
 import com.vkartik.myspace.ui.presentation.home.components.DrawerContent
@@ -139,7 +139,7 @@ fun HomeContent(
                 ExpensesScreen(modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 10.dp)) {
-                    appState.navigate(SubScreens.RECORD_TRANSACTIONS.route)
+                    appState.navigate(Routes.RecordTransactions)
                 }
             }
 

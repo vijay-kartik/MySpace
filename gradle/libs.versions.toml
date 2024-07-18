@@ -6,29 +6,31 @@ colorthief = "2.1.1"
 datastore = "1.0.0"
 firebase-bom = "33.1.2"
 firebase-storage = "21.0.0"
-firebase-vertexai = "16.0.0-beta02"
+firebase-vertexai = "16.0.0-beta03"
 google-services = "4.4.2"
 hilt-android-compiler = "2.51"
 hilt-navigation-compose = "1.2.0"
 kotlin = "1.9.23"
-core-ktx = "1.12.0"
+core-ktx = "1.13.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
+kotlin-serialization = "1.9.23"
+kotlinx-serialization-json = "1.6.3"
 lifecycle-runtime-ktx = "2.7.0"
-activity-compose = "1.8.2"
-compose-bom = "2024.03.00"
+activity-compose = "1.9.0"
+compose-bom = "2024.06.00"
 firebase-auth = "23.0.0"
-material-version = "1.6.4"
-navigation-compose = "2.7.7"
+material-version = "1.6.8"
+navigation-compose = "2.8.0-beta05"
 palette = "1.0.0"
 play-services-auth = "21.0.0"
 protobuf-kotlin-lite = "3.23.4"
-appcompat = "1.6.1"
-material = "1.11.0"
+appcompat = "1.7.0"
+material = "1.12.0"
 firebase-firestore-ktx = "25.0.0"
 room-runtime = "2.6.1"
-ui = "1.6.4"
+ui = "1.6.8"
 
 [libraries]
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
@@ -37,6 +39,8 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material-version" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 firebase-vertexai = { module = "com.google.firebase:firebase-vertexai", version.ref = "firebase-vertexai" }
+kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-compose" }
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-compose" }
 androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }

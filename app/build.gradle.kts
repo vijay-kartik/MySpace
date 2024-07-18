@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -106,6 +107,9 @@ dependencies {
     //image libraries
     implementation(libs.androidx.palette)
     implementation(libs.coil.compose)
+
+    //kotlin serialization
+    implementation(libs.kotlinx.serialization.json)
 
     //room deps
     ksp(libs.androidx.room.compiler)

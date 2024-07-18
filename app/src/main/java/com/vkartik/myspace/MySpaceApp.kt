@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.vkartik.myspace.ui.navigation.MySpaceNavHost
-import com.vkartik.myspace.ui.presentation.Screens
+import com.vkartik.myspace.ui.navigation.Routes
 import com.vkartik.myspace.ui.theme.MySpaceTheme
 import kotlinx.coroutines.CoroutineScope
 
@@ -23,7 +23,7 @@ fun MySpaceApp() {
         ) {
             MySpaceNavHost(
                 appState = rememberMySpaceAppState(),
-                startDestination = Screens.SIGN_IN.route
+                startDestination = Routes.SignIn
             )
         }
     }

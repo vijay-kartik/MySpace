@@ -1,6 +1,7 @@
 package com.vkartik.myspace
 
 import androidx.navigation.NavHostController
+import com.vkartik.myspace.ui.navigation.Routes
 import kotlinx.coroutines.CoroutineScope
 
 class MySpaceAppState(
@@ -8,11 +9,11 @@ class MySpaceAppState(
     val coroutineScope: CoroutineScope
 ) {
 
-    fun navigate(route: String) {
+    fun navigate(route: Routes) {
         navController.navigate(route) { launchSingleTop = true }
     }
 
-    fun navigateAndPopUp(route: String, popUp: String) {
+    fun navigateAndPopUp(route: Routes, popUp: Routes) {
         navController.navigate(route) {
             launchSingleTop = true
             popUpTo(popUp) { inclusive = true }
